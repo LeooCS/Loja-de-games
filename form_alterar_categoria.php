@@ -7,44 +7,51 @@
     <title>Document</title>
 </head>
 <body>
-    <form method="post" action="alterar_categoria.php">
+    <form method="post" action="alterar_categoria.php">    
         <h1>Alterar categoria</h1>
-        <select name="select_alterar">
-            <?php
-                require("connect.php");
-
-                $sql_pesquisar_categoria = "SELECT * FROM `categoria`";
-
-                $resultado = mysqli_query($connect,$sql_pesquisar_categoria);
-
-                $numero_resultado = mysqli_num_rows($resultado);
-
-                if($numero_resultado == 0)
-                    {
+        Selecione uma categoria:
+        <?php
+            //Fazendo a conexão - importando a página connect
+            require("connect.php");
+            //Pesquisando as categorias cadastradas no banco
+            $sql_pesquisa_categoria = "SELECT * FROM `categoria`";
+            //Executando a SQL
+            $resultado = mysqli_query($conexao,$sql_pesquisa_categoria);
+            //Transformando o resultado em numeros
+            $numero_resultado = mysqli_num_rows($resultado);
+            //Verificando se existe categorias cadastradas
+            if($numero_resultado == 0)
+                {
+                    //Não existe categorias cadastradas
                     ?>
-                
-                    <script>
-                        alert("Não existe a categoria selecionada");
-                        window.location.replace("form_excluir_categoria.php");
-                    </script>
-                <?php
+                        <script>
+                            alert("Não existe categorias cadastradas!");
+                            window.location.replace("index.html");
+                        </script>
+                    <?php
                 }
                 else
                 {
-                    echo"<select name='select_alterar':";
-                    for($i=0;$i<$numero_resultado;$i++){
-                        echo"<option> Teste </option>"
-
+                    //Se entrou no else, existe categorias cadastradas
+                    //Criando o select
+                    echo"<select name='select_alterar'>";                  
+                    //Laço de repetição, para imprimir a quantidade de categorais cadastradas        
+                    for($i=0;$i < $numero_resultado;$i++)
+                    {     
+                        //Transformando o resultado em um vetor
+                        $vetor_categoria = mysqli_fetch_array($resultado); 
+                        //Imprimindo na tela as categorias                  
+                        echo"<option value=$vetor_categoria[0]>$vetor_categoria[1]</option>";                        
                     }
+                    //Fechando o select
                     echo"</select>";
                 }
-            ?>
-            <option>teste</option>
-        </select>
+            ?>                             
+        </p>      
+        Digite a nova descrição:  
+        <input type=text name="c_novo_texto" size="30">
         </p>
-        Digite a nova categoria<br>
-        <input type="text" name="c_novo_texto" size=30><br><br>
-        <input type=submit value=Enviar>
+        <input type="submit" value="Enviar">        
     </form>
 </body>
 </html>
